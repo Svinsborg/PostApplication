@@ -12,24 +12,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        val moscowGMT = 10800L
-        val startDate: Long = 1605914700 // 20 November 2020 г., 23:25:00
-        val timestamp = System.currentTimeMillis()/1000 + moscowGMT
-        val timePost = frendlyTime((timestamp - startDate))
-
-
-
-
-
-
         val post = Post(1,"Andy",
                 "Some very long text for testing an application for Android",
-                "$timePost",
+                1605914700L, // 20 November 2020 г., 23:25:00
                 false,
                 13,
                 2,
                 1)
+
+        val moscowGMT = 10800L // +3 GMT
+        val startDate: Long = post.created
+        val timestamp = System.currentTimeMillis()/1000 + moscowGMT
+        val timePost = frendlyTime((timestamp - startDate))
 
         val author: TextView = findViewById(R.id.author)
         val dateCreated: TextView = findViewById(R.id.created)
@@ -40,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         var sharedCount: TextView = findViewById(R.id.sharedCount)
 
         author.text = post.author
-        dateCreated.text = post.created
+        dateCreated.text = timePost
         content.text = post.content
         if (post.likeCount > 0){ likeCount.text = post.likeCount.toString()
                                  post.liked = true}
