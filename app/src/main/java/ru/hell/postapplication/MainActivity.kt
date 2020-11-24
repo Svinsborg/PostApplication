@@ -2,6 +2,7 @@ package ru.hell.postapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -12,17 +13,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = Post(1,"Andy",
+        val post = Post(1, "Andy",
                 "Some very long text for testing an application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
                 false,
                 13,
                 2,
-                1)
+                5)
 
         val moscowGMT = 10800L // +3 GMT
         val startDate: Long = post.created
-        val timestamp = System.currentTimeMillis()/1000 + moscowGMT
+        val timestamp = System.currentTimeMillis() / 1000 + moscowGMT
         val timePost = frendlyTime((timestamp - startDate))
 
         val author: TextView = findViewById(R.id.author)
@@ -36,19 +37,48 @@ class MainActivity : AppCompatActivity() {
         author.text = post.author
         dateCreated.text = timePost
         content.text = post.content
-        if (post.likeCount > 0){ likeCount.text = post.likeCount.toString()
-                                 post.liked = true}
-        if (post.liked){ likeBtn.setImageResource(R.drawable.favoriteon)}
-        if (post.commentCount > 0){ commentCount.text = post.commentCount.toString() }
-        if (post.sharedCount > 0){ sharedCount.text = post.sharedCount.toString() }
-        
+        likeCount.text = likeMath(post.liked, post.likeCount)
+
+
+        likeBtn.setOnClickListener() {
+            likeBtn.setImageResource(
+                    if (post.liked) {
+                        R.drawable.favoriteoff
+                    } else {
+                        R.drawable.favoriteon
+                    }
+            )
+            post.liked =! post.liked
+            likeCount.text = likeMath(post.liked, post.likeCount)
+        }
+
+
+
+        if (post.commentCount > 0) {
+            commentCount.text = post.commentCount.toString()
+        }
+        if (post.sharedCount > 0) {
+            sharedCount.text = post.sharedCount.toString()
+        }
     }
 }
 
-fun frendlyTime(time:Long): String {
+private fun likeMath(like:Boolean, count:Int):String {
+    val effect: String
+    var summ: Int
+    if (like) summ = (count + 1)
+    else summ = (count)
+    if (summ > 0){
+        effect = summ.toString()
+    } else {
+        effect = " "
+    }
+    return effect
+}
 
+fun frendlyTime(time: Long): String {
     var stringTime: String
-    when (time){
+    when (time) {
         in 0..59L -> stringTime = "меньше минуты назад"
         in 0..3600L -> stringTime = oneHour(time)
         in 3600..7199 -> stringTime = "час назад"
@@ -64,72 +94,68 @@ fun frendlyTime(time:Long): String {
     return stringTime
 }
 
-fun oneHour(sec:Long): String {
+fun oneHour(sec: Long): String {
     var stringTime: String
-
-    val time = ( sec / 60 )
-    val lastСharacter: Long = time%10
-    if(time in 5..20){
+    val time = (sec / 60)
+    val lastСharacter: Long = time % 10
+    if (time in 5..20) {
         stringTime = "$time минут назад"
     } else {
-        if (lastСharacter == 1L ) {
+        if (lastСharacter == 1L) {
             stringTime = "$time минуту назад"
         } else if (lastСharacter in 5..9 || lastСharacter == 0L) {
             stringTime = "$time минут назад"
-        } else{
+        } else {
             stringTime = "$time минуты назад"
         }
     }
     return stringTime
 }
 
-fun oneDay(sec:Long): String {
+fun oneDay(sec: Long): String {
     var stringTime: String
-    val time = ( sec / 60 / 60 / 24 )
-    stringTime ="$time дней назад"
-    return stringTime
-}
-
-fun oneWeek(sec:Long): String {
-    var stringTime: String
-    when (val time = (sec / 60 / 60 / 24 / 7)) {
-        1L -> stringTime = "$time неделю назад"
-
-        in 2..4 ->  stringTime = "$time недели назад"
-
-        else -> stringTime ="$time недель назад"
-        }
-    return stringTime
-}
-
-fun oneMonth(sec:Long): String {
-    var stringTime: String
-    when (val time = ( sec / 60 / 60 / 24 / 30 )) {
-        in 2..4 -> {
-            stringTime ="$time месяца назад"
-        }
-        in 5..12 -> {
-            stringTime ="$time месяцев назад"
-        }
-        else -> {
-            stringTime ="$time месяц назад"
+    val time = (sec / 60 / 60 / 24)
+    val lastСharacter: Long = time % 10
+    if (time in 5..20) {
+        stringTime = "$time дней назад"
+    } else {
+        if (lastСharacter == 1L) {
+            stringTime = "$time день назад"
+        } else if (lastСharacter in 5..9 || lastСharacter == 0L) {
+            stringTime = "$time дней назад"
+        } else {
+            stringTime = "$time дня назад"
         }
     }
     return stringTime
 }
 
-fun oneYear(sec:Long): String {
+fun oneWeek(sec: Long): String {
     var stringTime: String
-    when (val time = ( sec / 60 / 60 / 24 / 30 / 12 )) {
-        1L -> {
-            stringTime = "$time год назад"
-        }
-        in 2..4 -> {
-            stringTime = "$time года назад"
-        }
-        else -> {
-            stringTime = "$time лет назад"
-        }
+    when (val time = (sec / 60 / 60 / 24 / 7)) {
+        1L -> stringTime = "$time неделю назад"
+        in 2..4 -> stringTime = "$time недели назад"
+        else -> stringTime = "$time недель назад"
+    }
+    return stringTime
+}
+
+fun oneMonth(sec: Long): String {
+    var stringTime: String
+    when (val time = (sec / 60 / 60 / 24 / 30)) {
+        in 2..4 -> stringTime = "$time месяца назад"
+        in 5..12 -> stringTime = "$time месяцев назад"
+        else -> stringTime = "$time месяц назад"
+    }
+    return stringTime
+}
+
+fun oneYear(sec: Long): String {
+    var stringTime: String
+    when (val time = (sec / 60 / 60 / 24 / 30 / 12)) {
+        1L -> stringTime = "$time год назад"
+        in 2..4 -> stringTime = "$time года назад"
+        else -> stringTime = "$time лет назад"
     }
     return stringTime
 }
