@@ -1,11 +1,15 @@
 package ru.hell.postapplication
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerFragment
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,12 +18,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val post = Post(1, "Andy",
-                "Some very long text for testing an application for Android",
+                "Some very long text for testing application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
                 false,
                 13,
                 2,
-                5)
+                5,
+                "Gotham City",
+                "m05_CeMOsJU",
+                Pair(40.76876535856855, -73.98833914503419)
+        )
 
         val moscowGMT = 10800L // +3 GMT
         val startDate: Long = post.created
@@ -33,12 +41,37 @@ class MainActivity : AppCompatActivity() {
         var likeCount: TextView = findViewById(R.id.likeCount)
         var commentCount: TextView = findViewById(R.id.commentCount)
         var sharedCount: TextView = findViewById(R.id.sharedCount)
+        val address: TextView = findViewById(R.id.address)
+
+        var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
+        youtubefragment.initialize("AIzaSyAt1lBesgTAFMYO3kZZ2_jCszK15jMgmYs", object: YouTubePlayer.OnInitializedListener {
+            override fun onInitializationSuccess(
+                provider: YouTubePlayer.Provider?,
+                player: YouTubePlayer?,
+                restored: Boolean
+            ) {
+                if(player == null) return
+                if (restored)
+                    player.play()
+                else{
+                    player.cueVideo(post.idVideoYT) //Video ID
+                    player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT)
+                }
+            }
+
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
+                TODO("Not yet implemented")
+            }
+        })
 
         author.text = post.author
         dateCreated.text = timePost
         content.text = post.content
         likeCount.text = likeMath(post.liked, post.likeCount)
-
+        address.text = post.address
 
         likeBtn.setOnClickListener() {
             likeBtn.setImageResource(
@@ -52,7 +85,13 @@ class MainActivity : AppCompatActivity() {
             likeCount.text = likeMath(post.liked, post.likeCount)
         }
 
-
+        address.setOnClickListener(){
+            val lat = post.location.first
+            val lng = post.location.second
+            val data = Uri.parse("geo:$lat,$lng")
+            val intent = Intent(Intent.ACTION_VIEW, data)
+            startActivity(intent)
+        }
 
         if (post.commentCount > 0) {
             commentCount.text = post.commentCount.toString()
@@ -76,22 +115,19 @@ private fun likeMath(like:Boolean, count:Int):String {
     return effect
 }
 
-fun frendlyTime(time: Long): String {
-    var stringTime: String
+fun frendlyTime(time: Long): String =
     when (time) {
-        in 0..59L -> stringTime = "меньше минуты назад"
-        in 0..3600L -> stringTime = oneHour(time)
-        in 3600..7199 -> stringTime = "час назад"
-        in 7200..10799 -> stringTime = "2 часа назад"
-        in 10800..86399 -> stringTime = "несколько часов назад"
-        in 86400..604799 -> stringTime = oneDay(time)
-        in 604800..2678399 -> stringTime = oneWeek(time)
-        in 2678400..31622399 -> stringTime = oneMonth(time)
-        in 31622399..157679999 -> stringTime = oneYear(time)
-        in 157680000..Long.MAX_VALUE -> stringTime = "A long time ago, in a galaxy far, far away…"
-        else -> stringTime = "Неверные данные"
-    }
-    return stringTime
+        in 0..59L -> "меньше минуты назад"
+        in 0..3600L -> oneHour(time)
+        in 3600..7199 -> "час назад"
+        in 7200..10799 ->  "2 часа назад"
+        in 10800..86399 ->  "несколько часов назад"
+        in 86400..604799 -> oneDay(time)
+        in 604800..2678399 -> oneWeek(time)
+        in 2678400..31622399 -> oneMonth(time)
+        in 31622399..157679999 -> oneYear(time)
+        in 157680000..Long.MAX_VALUE -> "A long time ago, in a galaxy far, far away…"
+        else -> "Неверные данные"
 }
 
 fun oneHour(sec: Long): String {
@@ -140,22 +176,16 @@ fun oneWeek(sec: Long): String {
     return stringTime
 }
 
-fun oneMonth(sec: Long): String {
-    var stringTime: String
+fun oneMonth(sec: Long): String =
     when (val time = (sec / 60 / 60 / 24 / 30)) {
-        in 2..4 -> stringTime = "$time месяца назад"
-        in 5..12 -> stringTime = "$time месяцев назад"
-        else -> stringTime = "$time месяц назад"
+        in 2..4 -> "$time месяца назад"
+        in 5..12 -> "$time месяцев назад"
+        else -> "$time месяц назад"
     }
-    return stringTime
-}
 
-fun oneYear(sec: Long): String {
-    var stringTime: String
+fun oneYear(sec: Long): String =
     when (val time = (sec / 60 / 60 / 24 / 30 / 12)) {
-        1L -> stringTime = "$time год назад"
-        in 2..4 -> stringTime = "$time года назад"
-        else -> stringTime = "$time лет назад"
+        1L -> "$time год назад"
+        in 2..4 -> "$time года назад"
+        else ->  "$time лет назад"
     }
-    return stringTime
-}

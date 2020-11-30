@@ -42,6 +42,16 @@
             app:layout_constraintTop_toBottomOf="@+id/created"
             tools:ignore="MissingConstraints" />
 
+        <fragment
+            android:id="@+id/youtube_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avatar"
+            tools:ignore="Instantiatable,MissingClass" />
+
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
@@ -54,7 +64,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar"
+            app:layout_constraintTop_toBottomOf="@+id/youtube_view"
             tools:ignore="MissingConstraints" />
 
         <TextView
@@ -128,6 +138,26 @@
             android:textAlignment="textStart"
             android:textColor="#7A7A7A"
             app:layout_constraintEnd_toStartOf="@+id/comment"
+            app:layout_constraintTop_toBottomOf="@+id/content" />
+
+        <ImageView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:srcCompat="@drawable/ic_location_4" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:textColor="#7A7A7A"
+            android:paddingTop="3dp"
+            android:paddingLeft="2dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/location"
             app:layout_constraintTop_toBottomOf="@+id/content" />
 
 

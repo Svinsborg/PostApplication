@@ -8,4 +8,8 @@ class Post(
         var liked: Boolean = false,
         var sharedCount: Int,
         var commentCount: Int,
-        var likeCount: Int) {}
+        var likeCount: Int,
+        val address: String,
+        val idVideoYT: String,
+        val location: Pair<Double, Double>
+        ) {}
