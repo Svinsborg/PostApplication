@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         val post = Post(1, "Andy",
                 "Some very long text for testing application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
-                false,
+                false, // No like
                 13,
                 2,
                 5,
