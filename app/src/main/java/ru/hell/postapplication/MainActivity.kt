@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                 "Some very long text for testing application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
                 false,
-                13,
+                13, //13
                 2,
                 5,
                 "Gotham City",
