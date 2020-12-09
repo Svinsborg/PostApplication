@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
             likeCount.text = likeMath(post.liked, post.likeCount)
         }
 
+        //apply
         address.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 val lat = post.location.first
