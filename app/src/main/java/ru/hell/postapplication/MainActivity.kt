@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerFragment
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 
 class MainActivity : AppCompatActivity() {
@@ -17,15 +16,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = Post(1, "Andy",
+        val post = EventsPost(
+                PostType.EVENTS,
+                1,
+                "Andy",
                 "Some very long text for testing application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
                 false,
                 13,
                 2,
                 5,
-                "Gotham City",
                 "m05_CeMOsJU",
+                "Gotham City",
                 Pair(40.76876535856855, -73.98833914503419)
         )
 
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val address: TextView = findViewById(R.id.address)
 
         var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
-        youtubefragment.initialize("AIzaSyAt1lBesgTAFMYO3kZZ2_jCszK15jMgmYs", object: YouTubePlayer.OnInitializedListener {
+        youtubefragment.initialize(R.string.api_key.toString(), object: YouTubePlayer.OnInitializedListener {
             override fun onInitializationSuccess(
                 provider: YouTubePlayer.Provider?,
                 player: YouTubePlayer?,
@@ -86,10 +88,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         address.setOnClickListener(){
-            val lat = post.location.first
-            val lng = post.location.second
-            val data = Uri.parse("geo:$lat,$lng")
-            val intent = Intent(Intent.ACTION_VIEW, data)
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                val lat = post.location.first
+                val lng = post.location.second
+                data = Uri.parse("geo:$lat,$lng")
+            }
             startActivity(intent)
         }
 

@@ -1,7 +1,8 @@
 package ru.hell.postapplication
 
-class Post(
-        val id: Long,
+open class Post(
+        var type: PostType = PostType.POST,
+        val id: Int,
         val author: String,
         val content: String,
         val created: Long,
@@ -9,7 +10,6 @@ class Post(
         var sharedCount: Int,
         var commentCount: Int,
         var likeCount: Int,
-        val address: String,
-        val idVideoYT: String,
-        val location: Pair<Double, Double>
-        ) {}
+        val idVideoYT: String
+) {
+}
