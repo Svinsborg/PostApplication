@@ -1,10 +1,10 @@
 package ru.hell.postapplication
 
-class Post(
-        val id: Long,
+data class Post(
+        val id: Int,
         val author: String,
         val content: String,
-        val created: Long,
+        val created: String,
         var liked: Boolean = false,
         var sharedCount: Int,
         var commentCount: Int,

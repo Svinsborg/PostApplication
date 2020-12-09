@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="3dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_height="wrap_content"
+    android:background="#303030">
+
+
+
+    <TextView
+        android:id="@+id/created"
+        android:textSize="10sp"
+        android:layout_marginStart="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textColor="#999999"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Author"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/created"
+        app:layout_constraintTop_toBottomOf="@+id/created"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/youtube_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avatar"
+        tools:ignore="Instantiatable" />
+    <!--android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"-->
+
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:text="Content"
+        android:textAlignment="viewStart"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_view"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/sharedCount"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:paddingTop="3dp"
+        android:paddingLeft="2dp"
+        android:text="  "
+        android:textAlignment="textStart"
+        android:textColor="#7A7A7A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        tools:ignore="MissingConstraints" />
+
+
+    <ImageView
+        android:id="@+id/shared"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintEnd_toStartOf="@+id/sharedCount"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:srcCompat="@drawable/share" />
+
+    <ImageView
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/commentCount"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:srcCompat="@drawable/comments" />
+
+    <ImageView
+        android:id="@+id/likeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintEnd_toStartOf="@+id/likeCount"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:srcCompat="@drawable/favoriteoff" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_avatar_batman"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/commentCount"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:paddingTop="3dp"
+        android:paddingLeft="2dp"
+        android:text="  "
+        android:textAlignment="textStart"
+        android:textColor="#7A7A7A"
+        app:layout_constraintEnd_toStartOf="@+id/shared"
+        app:layout_constraintTop_toBottomOf="@+id/content" />
+
+    <TextView
+        android:id="@+id/likeCount"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:paddingTop="3dp"
+        android:paddingLeft="2dp"
+        android:text="  "
+        android:textAlignment="textStart"
+        android:textColor="#7A7A7A"
+        app:layout_constraintEnd_toStartOf="@+id/comment"
+        app:layout_constraintTop_toBottomOf="@+id/content" />
+
+    <ImageView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:srcCompat="@drawable/ic_location_4" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textColor="#7A7A7A"
+        android:paddingTop="3dp"
+        android:paddingLeft="2dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/location"
+        app:layout_constraintTop_toBottomOf="@+id/content" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

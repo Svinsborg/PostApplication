@@ -2,22 +2,31 @@ package ru.hell.postapplication
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerFragment
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var postBlogAdapter : PostRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = Post(1, "Andy",
+        initRecyclerView()
+        loadData()
+
+/*        val post = Post(
+                  1,
+                "Andy",
                 "Some very long text for testing application for Android",
                 1605914700L, // 20 November 2020 г., 23:25:00
                 false,
@@ -27,9 +36,9 @@ class MainActivity : AppCompatActivity() {
                 "Gotham City",
                 "m05_CeMOsJU",
                 Pair(40.76876535856855, -73.98833914503419)
-        )
+        )*/
 
-        val moscowGMT = 10800L // +3 GMT
+/*        val moscowGMT = 10800L // +3 GMT
         val startDate: Long = post.created
         val timestamp = System.currentTimeMillis() / 1000 + moscowGMT
         val timePost = frendlyTime((timestamp - startDate))
@@ -41,10 +50,10 @@ class MainActivity : AppCompatActivity() {
         var likeCount: TextView = findViewById(R.id.likeCount)
         var commentCount: TextView = findViewById(R.id.commentCount)
         var sharedCount: TextView = findViewById(R.id.sharedCount)
-        val address: TextView = findViewById(R.id.address)
+        val address: TextView = findViewById(R.id.address)*/
 
-        var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
-        youtubefragment.initialize("AIzaSyAt1lBesgTAFMYO3kZZ2_jCszK15jMgmYs", object: YouTubePlayer.OnInitializedListener {
+/*        val youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
+        youtubefragment.initialize(R.string.key_api.toString(), object: YouTubePlayer.OnInitializedListener {
             override fun onInitializationSuccess(
                 provider: YouTubePlayer.Provider?,
                 player: YouTubePlayer?,
@@ -65,15 +74,15 @@ class MainActivity : AppCompatActivity() {
             ) {
                 TODO("Not yet implemented")
             }
-        })
-
-        author.text = post.author
+        })*/
+            //
+/*        author.text = post.author
         dateCreated.text = timePost
         content.text = post.content
         likeCount.text = likeMath(post.liked, post.likeCount)
-        address.text = post.address
+        address.text = post.address*/
 
-        likeBtn.setOnClickListener() {
+/*        likeBtn.setOnClickListener() {
             likeBtn.setImageResource(
                     if (post.liked) {
                         R.drawable.favoriteoff
@@ -83,26 +92,42 @@ class MainActivity : AppCompatActivity() {
             )
             post.liked =! post.liked
             likeCount.text = likeMath(post.liked, post.likeCount)
-        }
+        }*/
 
-        address.setOnClickListener(){
+/*        address.setOnClickListener(){
             val lat = post.location.first
             val lng = post.location.second
             val data = Uri.parse("geo:$lat,$lng")
             val intent = Intent(Intent.ACTION_VIEW, data)
             startActivity(intent)
-        }
+        }*/
 
-        if (post.commentCount > 0) {
+/*        if (post.commentCount > 0) {
             commentCount.text = post.commentCount.toString()
         }
         if (post.sharedCount > 0) {
             sharedCount.text = post.sharedCount.toString()
+        }*/
+    }
+    private fun loadData(){
+        val data = DateResource.createDataSet()
+        postBlogAdapter.submitData(data)
+    }
+
+
+    private fun initRecyclerView(){
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            postBlogAdapter = PostRecyclerAdapter()
+            adapter = postBlogAdapter
         }
     }
 }
 
-private fun likeMath(like:Boolean, count:Int):String {
+
+
+
+fun likeMath(like:Boolean, count:Int):String {
     val effect: String
     var summ: Int
     if (like) summ = (count + 1)
