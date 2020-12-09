@@ -2,13 +2,16 @@ package ru.hell.postapplication
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,6 +48,16 @@ class MainActivity : AppCompatActivity() {
         var sharedCount: TextView = findViewById(R.id.sharedCount)
         val address: TextView = findViewById(R.id.address)
 
+/*        val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youtube_view)
+
+        youTubePlayerView.getPlayerUiController().showFullscreenButton(true)
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(@NonNull youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
+                val videoId = post.idVideoYT
+                youTubePlayer.cueVideo(videoId, 0f)
+            }
+        })*/
+
         var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
         youtubefragment.initialize(R.string.api_key.toString(), object: YouTubePlayer.OnInitializedListener {
             override fun onInitializationSuccess(
@@ -68,6 +81,8 @@ class MainActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
+
+
 
         author.text = post.author
         dateCreated.text = timePost
@@ -106,7 +121,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private fun likeMath(like:Boolean, count:Int):String {
+
+private fun likeMath(like: Boolean, count: Int):String {
     val effect: String
     var summ: Int
     if (like) summ = (count + 1)
@@ -124,8 +140,8 @@ fun frendlyTime(time: Long): String =
         in 0..59L -> "меньше минуты назад"
         in 0..3600L -> oneHour(time)
         in 3600..7199 -> "час назад"
-        in 7200..10799 ->  "2 часа назад"
-        in 10800..86399 ->  "несколько часов назад"
+        in 7200..10799 -> "2 часа назад"
+        in 10800..86399 -> "несколько часов назад"
         in 86400..604799 -> oneDay(time)
         in 604800..2678399 -> oneWeek(time)
         in 2678400..31622399 -> oneMonth(time)
