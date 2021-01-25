@@ -3,14 +3,12 @@ package ru.hell.postapplication
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = EventsPost(
+        val post = Post(
                 PostType.EVENTS,
                 1,
                 "Andy",
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         var sharedCount: TextView = findViewById(R.id.sharedCount)
         val address: TextView = findViewById(R.id.address)
 
-/*        val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youtube_view)
+        val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youtube_view)
 
         youTubePlayerView.getPlayerUiController().showFullscreenButton(true)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -56,9 +54,9 @@ class MainActivity : AppCompatActivity() {
                 val videoId = post.idVideoYT
                 youTubePlayer.cueVideo(videoId, 0f)
             }
-        })*/
+        })
 
-        var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
+/*        var youtubefragment = supportFragmentManager.findFragmentById(R.id.youtube_view) as YouTubePlayerSupportFragment
         youtubefragment.initialize(R.string.api_key.toString(), object: YouTubePlayer.OnInitializedListener {
             override fun onInitializationSuccess(
                 provider: YouTubePlayer.Provider?,
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 TODO("Not yet implemented")
             }
-        })
+        })*/
 
 
 
@@ -103,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //apply
+
         address.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 val lat = post.location.first
