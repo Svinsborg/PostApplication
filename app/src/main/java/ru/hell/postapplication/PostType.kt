@@ -3,5 +3,8 @@ package ru.hell.postapplication
 enum class PostType {
     POST,
     EVENTS,
-    REPOST
+    REPOST,
+    REPLY,
+    VIDEO,
+    COMMERCIAL
 }
