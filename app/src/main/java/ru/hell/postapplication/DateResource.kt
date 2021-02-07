@@ -10,90 +10,77 @@ class DateResource {
         fun createDataSet(): ArrayList<Post> {
             val list = ArrayList<Post>()
 
-
-
 /*            list.add(
                 Post(
-                    PostType.POST,
-                    1,
-                    "Andy",
-                    "Some very long text for testing application for Android",
-                    "1605914700", // 20 November 2020 г., 23:25:00
-                    false,
-                    13,
-                    2,
-                    5,
-                    "Gotham City",
-                    "m05_CeMOsJU",
-                    Pair(40.76876535856855, -73.98833914503419),
-                    url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                        type = PostType.POST,
+                        id = 1,
+                        author = "Andy",
+                        content = "Some very long text for testing application for Android",
+                        created = "1605914700", // 20 November 2020 г., 23:25:00
+                        liked = false,
+                        sharedCount = 13,
+                        commentCount = 2,
+                        likeCount = 5
                 )
             )
 
             list.add(
                     Post(
-                            PostType.REPOST,
-                            2,
-                            "Filth",
-                            created = "1605914700", // 20 November 2020 г., 23:25:00
+                            type = PostType.REPOST,
+                            id = 2,
+                            author = "Filth",
+                            created = "1612299228",
                             liked =  false,
                             sharedCount = 13,
                             commentCount = 2,
-                            likeCount = 5
+                            likeCount = 5,
+                            source = list[1]
                     )
             )
 
             list.add(
                 Post(
-                    PostType.EVENTS,
-                    3,
-                    "RIDan",
-                    "Сломал все что было, кто ченить будет?",
-                    "1606785652",
-                    false,
-                    22,
-                    0,
-                    14,
-                    "Kandor",
-                    "Cv45cYW1zn8",
-                    Pair(61.66611486351941, 7.00560833613891),
-                    url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                        type = PostType.EVENTS,
+                        id = 3,
+                        author = "RIDan",
+                        content = "Сломал все что было, кто ченить будет? /n",
+                        created = "1606785652",
+                        liked = true,
+                        sharedCount = 22,
+                        commentCount = 0,
+                        likeCount = 14,
+                        address = "Kandor",
+                        location = Pair(61.66611486351941, 7.00560833613891)
                 )
             )
 
             list.add(
                 Post(
-                    PostType.VIDEO,
-                    4,
-                    "Svinsborg",
-                    "Свинья свиньей!",
-                    "1605610533",
-                    false,
-                    2,
-                    5,
-                    0,
-                    "Calvin City",
-                    "zDj8F7rFt5I",
-                    Pair(11.309692637213368, 124.8817415331434),
-                    url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                        type = PostType.VIDEO,
+                        id = 4,
+                        author = "Svinsborg",
+                        content = "Свинья свиньей!",
+                        created = "1605610533",
+                        liked = false,
+                        sharedCount = 2,
+                        commentCount = 5,
+                        likeCount = 0
                 )
             )
 
             list.add(
                 Post(
-                    PostType.COMMERCIAL,
-                    5,
-                    "Satan",
-                    "Работай! А то так и будешь пыль с камер протирать!",
-                    "1606577272",
-                    false,
-                    0,
-                    0,
-                    0,
-                    "Argo City",
-                    "EzjzKLEVubE",
-                    Pair(73.18092555450909, 127.27186210943175),
-                    url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                        type = PostType.COMMERCIAL,
+                        id = 5,
+                        author = "Satan",
+                        content = "Работай! А то так и будешь пыль с камер протирать!",
+                        created = "1606577272",
+                        liked = false,
+                        sharedCount = 0,
+                        commentCount = 0,
+                        likeCount = 0,
+                        img = "http://95.165.135.238/img/res/pic/001.jpg",
+                        url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
             )*/
 
@@ -111,6 +98,7 @@ class DateResource {
                         address = "Gotham City",
                         idVideoYT = "m05_CeMOsJU",
                         location = Pair(40.76876535856855, -73.98833914503419),
+                        img = "http://pravo.gov.ru/upload/medialibrary/db9/db93036a8b261613f0e3dc981e9447ad.jpg",
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
             )
@@ -129,10 +117,11 @@ class DateResource {
                         address = "New Genesis",
                         idVideoYT = "a4Uzufh4X3A",
                         location = Pair(35.95125187624326, 138.8906123061434),
+                        img = "https://cdn1.ozone.ru/multimedia/1014598895.jpg",
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
             )
-
+/*
             list.add(
                 Post(
                         type = PostType.POST,
@@ -329,7 +318,7 @@ class DateResource {
                         location = Pair(23.89672760821924, 120.37252999583876),
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
-            )
+            )*/
             return list
         }
     }

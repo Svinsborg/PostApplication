@@ -14,6 +14,6 @@ data class Post(
         val idVideoYT: String? = null,
         val location: Pair<Double, Double>? = null,
         val source: Post? = null,
-        val url: String? = null,
-
+        val img: String? = null,
+        val url: String? = null
         ) {}

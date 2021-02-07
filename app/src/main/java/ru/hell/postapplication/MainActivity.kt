@@ -35,9 +35,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
-
-
 fun likeMath(like:Boolean, count:Int):String {
     val effect: String
     var summ: Int
