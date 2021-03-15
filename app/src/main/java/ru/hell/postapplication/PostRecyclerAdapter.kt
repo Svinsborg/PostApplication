@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -51,6 +53,11 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val address: TextView = itemView.address
         private val image: ImageView = itemView.imageCommercial
         private val youTubePlayerView: YouTubePlayerView = itemView.youtube_view
+        private val imgGeo: ImageView = itemView.location
+        private val repost: LinearLayout = itemView.repost
+        private val repAuthor: TextView = itemView.repAuthor
+        private val repDate: TextView = itemView.repDate
+        private val repContent: TextView = itemView.repContent
 
         private lateinit var youTubePlayer: YouTubePlayer
 
@@ -70,16 +77,19 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         fun bind(post: Post) {
-            // обработка ошибки загрузки картинки
-            val requestOptions = RequestOptions()
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_no_connect)
 
-            // Загрузка картинки
-            Glide.with(itemView.context)
-                .applyDefaultRequestOptions(requestOptions)
-                .load(post.img)
-                .into(image)
+            if (post.img != null){
+                // обработка ошибки загрузки картинки
+                val requestOptions = RequestOptions()
+                        .placeholder(R.drawable.ic_loading)
+                        .error(R.drawable.ic_no_connect)
+
+                // Загрузка картинки
+                Glide.with(itemView.context)
+                        .applyDefaultRequestOptions(requestOptions)
+                        .load(post.img)
+                        .into(image)
+            }
 
             val moscowGMT = 10800L // +3 GMT
             val startDate: Long = post.created.toLong()
@@ -92,6 +102,17 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             content.text = post.content
             likeCount.text = likeMath(post.liked, post.likeCount)
             address.text = post.address
+
+            if (post.source != null){
+                repAuthor.text = post.source.author
+                val startDate: Long = post.source.created.toLong()
+                val timePost = frendlyTime((timestamp - startDate))
+                repDate.text = timePost
+                repContent.text = post.source.content
+                repContent.textSize = 18.0F
+                repDate.textSize = 10.0F
+                repAuthor.textSize = 15.0F
+            }
 
 
             // Проверяем заполнена ли переменная
@@ -129,12 +150,33 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 it.context.startActivity(intent)
             }
 
+            image.setOnClickListener {
+                val url = post.url
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                it.context.startActivity(intent)
+            }
+
             if (post.commentCount > 0) {
                 commentCount.text = post.commentCount.toString()
             }
             if (post.sharedCount > 0) {
                 sharedCount.text = post.sharedCount.toString()
             }
+
+            when (post.type) {
+ //               PostType.POST -> showHide(imgGeo)
+                PostType.EVENTS -> showHide(imgGeo)
+                PostType.REPOST -> showHide(repost)
+//                PostType.REPLY -> showHide(imgGeo)
+//                PostType.VIDEO -> showHide(imgGeo)
+                PostType.COMMERCIAL -> showHide(image)
+            }
         }
+
+        private fun showHide(view:View) {
+            view.visibility = View.VISIBLE
+        }
+
     }
 }

@@ -34,17 +34,55 @@
         app:layout_constraintTop_toBottomOf="@+id/created"
         tools:ignore="MissingConstraints" />
 
+    <LinearLayout
+        android:id="@+id/repost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#252525"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avatar"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/repDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#999999"
+            android:textSize="0sp" />
+
+        <TextView
+            android:id="@+id/repAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toTopOf="@+id/repDate"
+            android:textSize="0sp"/>
+
+        <TextView
+            android:id="@+id/repContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#FFFFFF"
+            android:textSize="0sp" />
+
+    </LinearLayout>
+
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtube_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar"/>
+        app:layout_constraintTop_toBottomOf="@+id/repost"/>
     <!--android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"-->
 
     <ImageView
         android:id="@+id/imageCommercial"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +123,6 @@
         android:id="@+id/shared"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toStartOf="@+id/sharedCount"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:srcCompat="@drawable/share" />
@@ -102,7 +139,6 @@
         android:id="@+id/likeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toStartOf="@+id/likeCount"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:srcCompat="@drawable/favoriteoff" />
@@ -142,6 +178,7 @@
 
     <ImageView
         android:id="@+id/location"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
@@ -159,6 +196,7 @@
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/location"
         app:layout_constraintTop_toBottomOf="@+id/content" />
+
 
 
 

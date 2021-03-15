@@ -10,10 +10,10 @@ class DateResource {
         fun createDataSet(): ArrayList<Post> {
             val list = ArrayList<Post>()
 
-/*            list.add(
+            list.add(
                 Post(
                         type = PostType.POST,
-                        id = 1,
+                        id = 0,
                         author = "Andy",
                         content = "Some very long text for testing application for Android",
                         created = "1605914700", // 20 November 2020 г., 23:25:00
@@ -27,21 +27,21 @@ class DateResource {
             list.add(
                     Post(
                             type = PostType.REPOST,
-                            id = 2,
+                            id = 1,
                             author = "Filth",
                             created = "1612299228",
                             liked =  false,
                             sharedCount = 13,
                             commentCount = 2,
                             likeCount = 5,
-                            source = list[1]
+                            source = list[0]
                     )
             )
 
             list.add(
                 Post(
                         type = PostType.EVENTS,
-                        id = 3,
+                        id = 2,
                         author = "RIDan",
                         content = "Сломал все что было, кто ченить будет? /n",
                         created = "1606785652",
@@ -57,11 +57,12 @@ class DateResource {
             list.add(
                 Post(
                         type = PostType.VIDEO,
-                        id = 4,
+                        id = 3,
                         author = "Svinsborg",
                         content = "Свинья свиньей!",
                         created = "1605610533",
                         liked = false,
+                        idVideoYT = "a4Uzufh4X3A",
                         sharedCount = 2,
                         commentCount = 5,
                         likeCount = 0
@@ -71,7 +72,7 @@ class DateResource {
             list.add(
                 Post(
                         type = PostType.COMMERCIAL,
-                        id = 5,
+                        id = 4,
                         author = "Satan",
                         content = "Работай! А то так и будешь пыль с камер протирать!",
                         created = "1606577272",
@@ -79,12 +80,12 @@ class DateResource {
                         sharedCount = 0,
                         commentCount = 0,
                         likeCount = 0,
-                        img = "http://95.165.135.238/img/res/pic/001.jpg",
+                        img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
-            )*/
+            )
 
-            list.add(
+/*           list.add(
                 Post(
                         type = PostType.POST,
                         id = 1,
@@ -95,11 +96,11 @@ class DateResource {
                         sharedCount = 13,
                         commentCount = 2,
                         likeCount = 5,
-                        address = "Gotham City",
-                        idVideoYT = "m05_CeMOsJU",
+                        //address = "Gotham City",
+                        //idVideoYT = "m05_CeMOsJU",
                         location = Pair(40.76876535856855, -73.98833914503419),
-                        img = "http://pravo.gov.ru/upload/medialibrary/db9/db93036a8b261613f0e3dc981e9447ad.jpg",
-                        url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                        img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
+                        //url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
             )
 
@@ -117,12 +118,12 @@ class DateResource {
                         address = "New Genesis",
                         idVideoYT = "a4Uzufh4X3A",
                         location = Pair(35.95125187624326, 138.8906123061434),
-                        img = "https://cdn1.ozone.ru/multimedia/1014598895.jpg",
+                        img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
-            )
-/*
-            list.add(
+            )*/
+
+/*             list.add(
                 Post(
                         type = PostType.POST,
                         id = 3,

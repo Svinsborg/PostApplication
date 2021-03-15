@@ -1,7 +1,7 @@
 package ru.hell.postapplication
 
 data class Post(
-        val type: PostType,
+        val type: PostType = PostType.POST,
         val id: Int,
         val author: String,
         val content: String? = null,

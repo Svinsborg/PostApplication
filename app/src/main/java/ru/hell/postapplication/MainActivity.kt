@@ -15,20 +15,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         initRecyclerView()
         loadData()
-
     }
+
     private fun loadData(){
         val data = DateResource.createDataSet()
         postBlogAdapter.submitData(data)
     }
 
-
     private fun initRecyclerView(){
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
+            val topPadding = SpacingItemDecoration(20)
+            addItemDecoration(topPadding)
             postBlogAdapter = PostRecyclerAdapter()
             adapter = postBlogAdapter
         }
