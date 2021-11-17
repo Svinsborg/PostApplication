@@ -43,7 +43,7 @@ class DateResource {
                         type = PostType.EVENTS,
                         id = 2,
                         author = "RIDan",
-                        content = "Сломал все что было, кто ченить будет? /n",
+                        content = "Сломал все что было, кто ченить будет? \nСмотри геолокацияю ниже",
                         created = "1606785652",
                         liked = true,
                         sharedCount = 22,
@@ -82,6 +82,22 @@ class DateResource {
                         likeCount = 0,
                         img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
                         url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                )
+            )
+
+            list.add(
+                Post(
+                    type = PostType.COMMERCIAL,
+                    id = 5,
+                    author = "Brute",
+                    content = "Сломал ногу об гранит науки",
+                    created = "1559061882",
+                    liked = true,
+                    sharedCount = 0,
+                    commentCount = 0,
+                    likeCount = 2,
+                    img = "https://viktorov.ml/img/res/pic/001.jpg",
+                    url = "https://viktorov.ml/"
                 )
             )
 
