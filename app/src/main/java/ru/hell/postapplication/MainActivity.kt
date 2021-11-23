@@ -5,6 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,14 +21,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val  getResp  = ConnectionToJsonFile
+        val  mainScope = MainScope()
+
+        mainScope.launch {
+            val data = getResp.connection()
+            postBlogAdapter.submitData(data)
+        }
+
         initRecyclerView()
-        loadData()
+        //loadData()
+
     }
 
-    private fun loadData(){
+/*    private suspend fun loadData(): List<Post> {
+            val data = ConnectionToJsonFile.connection()
+            return data
+    }*/
+
+/*    private fun loadData(){
         val data = DateResource.createDataSet()
         postBlogAdapter.submitData(data)
-    }
+    }*/
 
     private fun initRecyclerView(){
         recycler_view.apply {
@@ -34,6 +55,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+fun printText(input: String){
+    val text = input
+    println("Ответ: $input")
+}
+
+suspend fun sendDateToMainThread(input: Unit){
+    withContext(Main){
+        val text = input.toString()
+        printText(text)
+    }
+}
+
+
 
 fun likeMath(like:Boolean, count:Int):String {
     val effect: String
