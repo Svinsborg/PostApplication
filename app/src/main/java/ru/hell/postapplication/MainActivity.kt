@@ -1,16 +1,16 @@
 package ru.hell.postapplication
 
 
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.ktor.client.engine.cio.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,26 +21,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        val  getResp  = ConnectionToJsonFile
-        val  mainScope = MainScope()
-
-        mainScope.launch {
-            val data = getResp.connection()
-            postBlogAdapter.submitData(data)
+        initRecyclerView()
+        CoroutineScope(IO).launch {
+            getData()
         }
 
-        initRecyclerView()
+/*        GlobalScope.launch(Dispatchers.Main){
+            val client = ConnectionToJsonFile(CIO.create())
+            val response = client.getPost()
+            postBlogAdapter.submitData(response)
+        }*/
         //loadData()
 
     }
 
-/*    private suspend fun loadData(): List<Post> {
-            val data = ConnectionToJsonFile.connection()
-            return data
-    }*/
+    private suspend fun getData() {
+            val client = ConnectionToJsonFile(CIO.create())
+            //val response = client.getPost()
+            setDataOnMainThread(client.getPost())
+    }
 
-/*    private fun loadData(){
+/*    fun loadData(){
         val data = DateResource.createDataSet()
         postBlogAdapter.submitData(data)
     }*/
@@ -54,17 +55,15 @@ class MainActivity : AppCompatActivity() {
             adapter = postBlogAdapter
         }
     }
-}
 
-fun printText(input: String){
-    val text = input
-    println("Ответ: $input")
-}
+    private fun loadData(input: List<Post>){
+        postBlogAdapter.submitData(input)
+    }
 
-suspend fun sendDateToMainThread(input: Unit){
-    withContext(Main){
-        val text = input.toString()
-        printText(text)
+    private suspend fun setDataOnMainThread (input: List<Post>){
+        withContext(Main){
+            loadData(input)
+        }
     }
 }
 

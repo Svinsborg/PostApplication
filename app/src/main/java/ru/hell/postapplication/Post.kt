@@ -1,5 +1,8 @@
 package ru.hell.postapplication
 
+import kotlinx.serialization.*
+
+@Serializable
 data class Post(
         val type: PostType = PostType.POST,
         val id: Int,
