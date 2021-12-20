@@ -4,10 +4,13 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.client.features.logging.*
-import io.ktor.client.features.json.serializer.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 
 const val URL0 = "https://raw.githubusercontent.com/Svinsborg/jsonfiles/main/autocreate.json"
@@ -35,22 +38,24 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
 
 
     suspend fun getPost():List<Post> {
-        return try {
-            client.get {
-                url(URL3)
+        return withContext(Dispatchers.IO) {
+            try {
+                client.get {
+                    url(URL3)
+                }
+            } catch (err: RedirectResponseException) {
+                println("->> Error redirect: ${err.response.status.description}")
+                emptyList()
+            } catch (err: ClientRequestException) {
+                println("->> Error client: ${err.response.status.description}")
+                emptyList()
+            } catch (err: ServerResponseException) {
+                println("->> Error server: ${err.response.status.description}")
+                emptyList()
+            } catch (err: Exception) {
+                println("->> Error others: ${err.message}")
+                emptyList()
             }
-        } catch (err: RedirectResponseException) {
-            println("->> Error redirect: ${err.response.status.description}")
-            emptyList()
-        } catch (err: ClientRequestException) {
-            println("->> Error client: ${err.response.status.description}")
-            emptyList()
-        } catch (err: ServerResponseException) {
-            println("->> Error server: ${err.response.status.description}")
-            emptyList()
-        } catch (err: Exception) {
-            println("->> Error others: ${err.message}")
-            emptyList()
         }
     }
 }

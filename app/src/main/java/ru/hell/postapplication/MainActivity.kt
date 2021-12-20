@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.ktor.client.engine.cio.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 
@@ -22,8 +21,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        CoroutineScope(IO).launch {
-            getData()
+        GlobalScope.launch(Dispatchers.Main) {
+            runBlocking {               // runBlocking - блокирует основной поток, получается что программа должна повиснуть пока не отработает корутина??
+                                        // это так думаю костыль?
+                val client = ConnectionToJsonFile(CIO.create())
+                val response = client.getPost()
+                postBlogAdapter.submitData(response)
+            }
         }
 
 /*        GlobalScope.launch(Dispatchers.Main){
@@ -35,16 +39,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private suspend fun getData() {
+    // В поисках рабочего рецепта ....
+/*    private suspend fun getData() {
             val client = ConnectionToJsonFile(CIO.create())
             //val response = client.getPost()
             setDataOnMainThread(client.getPost())
-    }
-
-/*    fun loadData(){
-        val data = DateResource.createDataSet()
-        postBlogAdapter.submitData(data)
     }*/
+
+
 
     private fun initRecyclerView(){
         recycler_view.apply {
@@ -56,15 +58,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadData(input: List<Post>){
+
+    // Загрузка из библиотеки ресурсов
+    /*    fun loadData(){
+        val data = DateResource.createDataSet()
+        postBlogAdapter.submitData(data)
+    }
+    */
+
+
+    // Загрузка из сети
+/*    private fun loadData(input: List<Post>){
         postBlogAdapter.submitData(input)
     }
+    */
 
-    private suspend fun setDataOnMainThread (input: List<Post>){
+    // Передача параметров в основной поток
+/*    private suspend fun setDataOnMainThread (input: List<Post>){
         withContext(Main){
             loadData(input)
         }
     }
+    */
 }
 
 
