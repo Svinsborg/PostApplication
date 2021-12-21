@@ -25,8 +25,10 @@ class MainActivity : AppCompatActivity() {
             runBlocking {               // runBlocking - блокирует основной поток, получается что программа должна повиснуть пока не отработает корутина??
                                         // это так думаю костыль?
                 val client = ConnectionToJsonFile(CIO.create())
-                val response = client.getPost()
-                postBlogAdapter.submitData(response)
+                val response: Deferred<List<Post>> = async {
+                    client.getPost()
+                }
+                postBlogAdapter.submitData(response.await())
             }
         }
 

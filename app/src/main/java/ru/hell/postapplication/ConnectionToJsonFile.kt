@@ -1,5 +1,7 @@
 package ru.hell.postapplication
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.features.*
@@ -30,12 +32,12 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
             )
         }
         install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
+            //logger = Logger.DEFAULT
+            //level = LogLevel.ALL
+            Log.d(TAG, "HTTP Client: ${Logger.DEFAULT}")
+            Log.d(TAG, "HTTP Client: ${LogLevel.ALL}")
         }
     }
-
-
 
     suspend fun getPost():List<Post> {
         return withContext(Dispatchers.IO) {
@@ -44,16 +46,16 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
                     url(URL3)
                 }
             } catch (err: RedirectResponseException) {
-                println("->> Error redirect: ${err.response.status.description}")
+                Log.d(TAG,"->> Error redirect: ${err.response.status.description}")
                 emptyList()
             } catch (err: ClientRequestException) {
-                println("->> Error client: ${err.response.status.description}")
+                Log.d(TAG,"->> Error client: ${err.response.status.description}")
                 emptyList()
             } catch (err: ServerResponseException) {
-                println("->> Error server: ${err.response.status.description}")
+                Log.d(TAG,"->> Error server: ${err.response.status.description}")
                 emptyList()
             } catch (err: Exception) {
-                println("->> Error others: ${err.message}")
+                Log.d(TAG,"->> Error others: ${err.message}")
                 emptyList()
             }
         }
