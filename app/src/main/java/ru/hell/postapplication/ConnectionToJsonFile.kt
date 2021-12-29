@@ -1,6 +1,5 @@
 package ru.hell.postapplication
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.*
@@ -34,8 +33,8 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
         install(Logging) {
             //logger = Logger.DEFAULT
             //level = LogLevel.ALL
-            Log.d(TAG, "HTTP Client: ${Logger.DEFAULT}")
-            Log.d(TAG, "HTTP Client: ${LogLevel.ALL}")
+            Log.d("->> HTTP Client: ", Logger.DEFAULT.toString())
+            Log.d("->> HTTP Client: ", LogLevel.ALL.toString())
         }
     }
 
@@ -44,20 +43,27 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
             try {
                 client.get {
                     url(URL3)
+                    onDownload { bytesSentTotal, contentLength ->  println("==== >>>>> Received $bytesSentTotal bytes from $contentLength !!!!!!!!")  }
                 }
             } catch (err: RedirectResponseException) {
-                Log.d(TAG,"->> Error redirect: ${err.response.status.description}")
+                Log.e("->> Error redirect: ", err.response.status.description)
                 emptyList()
             } catch (err: ClientRequestException) {
-                Log.d(TAG,"->> Error client: ${err.response.status.description}")
+                Log.e("->> Error client: ", err.response.status.description)
                 emptyList()
             } catch (err: ServerResponseException) {
-                Log.d(TAG,"->> Error server: ${err.response.status.description}")
+                Log.e("->> Error server: ", err.response.status.description)
                 emptyList()
             } catch (err: Exception) {
-                Log.d(TAG,"->> Error others: ${err.message}")
+                Log.e("->> Error others: ", err.message)
                 emptyList()
             }
         }
+    }
+
+    fun DatdSize(i: Long, j: Long) {
+        val bySend = i
+        val conSize = j
+        println("==== >>>>> Received $bySend bytes from $conSize !!!!!!!!")
     }
 }

@@ -2,53 +2,43 @@ package ru.hell.postapplication
 
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.ktor.client.engine.cio.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private lateinit var postBlogAdapter : PostRecyclerAdapter
+    private lateinit var NetworkLoad: CompletableJob
+    private val LOAD_FULL = 100
+    private val LOAD_START = 0
+    private val LOAD_TIME = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        GlobalScope.launch(Dispatchers.Main) {
-            runBlocking {               // runBlocking - блокирует основной поток, получается что программа должна повиснуть пока не отработает корутина??
-                                        // это так думаю костыль?
-                val client = ConnectionToJsonFile(CIO.create())
-                val response: Deferred<List<Post>> = async {
-                    client.getPost()
-                }
-                postBlogAdapter.submitData(response.await())
-            }
-        }
-
-/*        GlobalScope.launch(Dispatchers.Main){
-            val client = ConnectionToJsonFile(CIO.create())
-            val response = client.getPost()
-            postBlogAdapter.submitData(response)
-        }*/
-        //loadData()
-
+        initNetworkLoad()
+        LoadData.startLoad(NetworkLoad)
+        loadData()
     }
 
-    // В поисках рабочего рецепта ....
-/*    private suspend fun getData() {
-            val client = ConnectionToJsonFile(CIO.create())
-            //val response = client.getPost()
-            setDataOnMainThread(client.getPost())
-    }*/
-
-
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
+    }
 
     private fun initRecyclerView(){
         recycler_view.apply {
@@ -60,35 +50,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    // Загрузка из библиотеки ресурсов
-    /*    fun loadData(){
-        val data = DateResource.createDataSet()
-        postBlogAdapter.submitData(data)
+    @SuppressLint("NotifyDataSetChanged")
+    private fun loadData() = launch{
+        val client = ConnectionToJsonFile(CIO.create())
+        val response = client.getPost()
+        postBlogAdapter.submitData(response)
+        postBlogAdapter.notifyDataSetChanged() // NotifyDataSetChanged - так и не понял что за инструмент, когда и зачем его используют?
     }
-    */
 
 
-    // Загрузка из сети
-/*    private fun loadData(input: List<Post>){
-        postBlogAdapter.submitData(input)
+
+    private fun initNetworkLoad(){
+        LoadData.visibility = View.INVISIBLE
+        NetworkLoad = Job()
+        NetworkLoad.invokeOnCompletion {
+            it?.message.let {
+                var msg = it
+                if (msg.isNullOrBlank()){
+                    msg = "Unknown ERR"
+                }
+                Log.e("Load ERR:","$NetworkLoad cancelled! $msg")
+                showToast(msg)
+            }
+        }
+        LoadData.max = LOAD_FULL
+        LoadData.progress = LOAD_START
     }
-    */
 
-    // Передача параметров в основной поток
-/*    private suspend fun setDataOnMainThread (input: List<Post>){
-        withContext(Main){
-            loadData(input)
+    private fun ProgressBar.startLoad(load: Job){
+        LoadData.visibility = View.VISIBLE
+        CoroutineScope(IO + load).launch {
+            for (i in LOAD_START .. LOAD_FULL){
+                delay((LOAD_TIME / LOAD_FULL).toLong())
+                this@startLoad.progress = i
+            }
+            launch(Main) {
+                showToast("Load Done")
+                LoadData.visibility = View.GONE
+            }
         }
     }
-    */
+
+    private fun showToast(msg: String) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show()
+    }
+
 }
-
-
 
 fun likeMath(like:Boolean, count:Int):String {
     val effect: String
-    var summ: Int
+    val summ: Int
     if (like) summ = (count + 1)
     else summ = (count)
     if (summ > 0){
