@@ -2,37 +2,42 @@ package ru.hell.postapplication
 
 
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.ktor.client.engine.cio.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+
 
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private lateinit var postBlogAdapter : PostRecyclerAdapter
-    private lateinit var NetworkLoad: CompletableJob
+/*    private lateinit var NetworkLoad: CompletableJob
     private val LOAD_FULL = 100
     private val LOAD_START = 0
-    private val LOAD_TIME = 5000
+    private val LOAD_TIME = 5000*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        initNetworkLoad()
-        LoadData.startLoad(NetworkLoad)
+        //initNetworkLoad()
         loadData()
+/*        LoadData.startLoad(NetworkLoad)
+        lifecycleScope.launch {
+            val client = ConnectionToJsonFile(CIO.create())
+            val response = client.getPost()
+            postBlogAdapter.submitData(response)
+            postBlogAdapter.notifyDataSetChanged()
+        }*/
     }
 
     override fun onDestroy() {
@@ -50,17 +55,33 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun loadData() = launch{
+    private fun loadData() = launch {
         val client = ConnectionToJsonFile(CIO.create())
-        val response = client.getPost()
-        postBlogAdapter.submitData(response)
-        postBlogAdapter.notifyDataSetChanged() // NotifyDataSetChanged - так и не понял что за инструмент, когда и зачем его используют?
+        client.getPost()
+            // TODO Для демонстрации
+            .onEach { delay(100) }
+            .onEach {
+                when (val result = it) {
+                    is DownloadResult.Error -> {
+                        LoadData.isVisible = false
+                        showToast("No internet connection")
+                    }
+                    is DownloadResult.Progress -> {
+                        LoadData.isVisible = true
+                        LoadData.progress = result.percent
+                    }
+                    is DownloadResult.Success -> {
+                        LoadData.isVisible = false
+                        postBlogAdapter.submitData(result.value)
+                        postBlogAdapter.notifyItemRangeInserted(0, result.value.size)
+                    }
+                }
+            }
+            .collect()
     }
 
 
-
-    private fun initNetworkLoad(){
+/*    private fun initNetworkLoad(){
         LoadData.visibility = View.INVISIBLE
         NetworkLoad = Job()
         NetworkLoad.invokeOnCompletion {
@@ -75,9 +96,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
         LoadData.max = LOAD_FULL
         LoadData.progress = LOAD_START
-    }
+    }*/
 
-    private fun ProgressBar.startLoad(load: Job){
+/*    private fun ProgressBar.startLoad(load: Job){
         LoadData.visibility = View.VISIBLE
         CoroutineScope(IO + load).launch {
             for (i in LOAD_START .. LOAD_FULL){
@@ -89,7 +110,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 LoadData.visibility = View.GONE
             }
         }
-    }
+    }*/
 
     private fun showToast(msg: String) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show()
