@@ -3,7 +3,6 @@ package ru.hell.postapplication
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.*
-import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.io.IOException
 import kotlin.math.roundToInt
 
 
@@ -24,6 +22,7 @@ const val URL1 = "https://viktorov.ml/res/doc/AutoCreate.json"
 const val URL2 = "https://95.165.135.238/res/doc/AutoCreate.json"
 const val URL3 = "http://viktorov.ml:8008/post"
 const val URL4 = "http://viktorov.ml:8008/sql"
+const val URL5 = "http://192.168.1.75:8008/post"
 
 sealed interface DownloadResult<out T> {
     data class Success<T>(val value: T) : DownloadResult<T>
@@ -44,35 +43,10 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
             )
         }
         install(Logging) {
-            //logger = Logger.DEFAULT
-            //level = LogLevel.ALL
             Log.d("->> HTTP Client: ", Logger.DEFAULT.toString())
             Log.d("->> HTTP Client: ", LogLevel.ALL.toString())
         }
     }
-
-/*    suspend fun getPost():List<Post> {
-        return withContext(Dispatchers.IO) {
-            try {
-                client.get {
-                    url(URL3)
-                    onDownload { bytesSentTotal, contentLength ->  println("==== >>>>> Received $bytesSentTotal bytes from $contentLength !!!!!!!!")  }
-                }
-            } catch (err: RedirectResponseException) {
-                Log.e("->> Error redirect: ", err.response.status.description)
-                emptyList()
-            } catch (err: ClientRequestException) {
-                Log.e("->> Error client: ", err.response.status.description)
-                emptyList()
-            } catch (err: ServerResponseException) {
-                Log.e("->> Error server: ", err.response.status.description)
-                emptyList()
-            } catch (err: Exception) {
-                Log.e("->> Error others: ", err.message.orEmpty())
-                emptyList()
-            }
-        }
-    }*/
 
     fun getPost(): Flow<PostsResult> =
         flow {
@@ -95,22 +69,8 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
                     }
                 } while (currentRead > 0)
                 emit(DownloadResult.Success(Json.decodeFromString(String(data))))
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 emit(DownloadResult.Error(e))
-            } catch (err: RedirectResponseException) {
-                Log.e("->> Error redirect: ", err.response.status.description)
-            } catch (err: ClientRequestException) {
-                Log.e("->> Error client: ", err.response.status.description)
-            } catch (err: ServerResponseException) {
-                Log.e("->> Error server: ", err.response.status.description)
-            } catch (err: Exception) {
-                Log.e("->> Error others: ", err.message.orEmpty())
             }
         }
-
-/*    fun DatdSize(i: Long, j: Long) {
-        val bySend = i
-        val conSize = j
-        println("==== >>>>> Received $bySend bytes from $conSize !!!!!!!!")
-    }*/
 }

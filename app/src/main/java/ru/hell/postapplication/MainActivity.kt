@@ -3,7 +3,6 @@ package ru.hell.postapplication
 
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -19,25 +18,14 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private lateinit var postBlogAdapter : PostRecyclerAdapter
-/*    private lateinit var NetworkLoad: CompletableJob
-    private val LOAD_FULL = 100
-    private val LOAD_START = 0
-    private val LOAD_TIME = 5000*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        //initNetworkLoad()
+
         loadData()
-/*        LoadData.startLoad(NetworkLoad)
-        lifecycleScope.launch {
-            val client = ConnectionToJsonFile(CIO.create())
-            val response = client.getPost()
-            postBlogAdapter.submitData(response)
-            postBlogAdapter.notifyDataSetChanged()
-        }*/
     }
 
     override fun onDestroy() {
@@ -80,42 +68,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             .collect()
     }
 
-
-/*    private fun initNetworkLoad(){
-        LoadData.visibility = View.INVISIBLE
-        NetworkLoad = Job()
-        NetworkLoad.invokeOnCompletion {
-            it?.message.let {
-                var msg = it
-                if (msg.isNullOrBlank()){
-                    msg = "Unknown ERR"
-                }
-                Log.e("Load ERR:","$NetworkLoad cancelled! $msg")
-                showToast(msg)
-            }
-        }
-        LoadData.max = LOAD_FULL
-        LoadData.progress = LOAD_START
-    }*/
-
-/*    private fun ProgressBar.startLoad(load: Job){
-        LoadData.visibility = View.VISIBLE
-        CoroutineScope(IO + load).launch {
-            for (i in LOAD_START .. LOAD_FULL){
-                delay((LOAD_TIME / LOAD_FULL).toLong())
-                this@startLoad.progress = i
-            }
-            launch(Main) {
-                showToast("Load Done")
-                LoadData.visibility = View.GONE
-            }
-        }
-    }*/
-
     private fun showToast(msg: String) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show()
     }
-
 }
 
 fun likeMath(like:Boolean, count:Int):String {

@@ -1,7 +1,10 @@
 package ru.hell.postapplication
 
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +12,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.post_view.view.*
+
 
 class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -78,16 +87,46 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(post: Post) {
 
-            if (post.img != null){
-                // обработка ошибки загрузки картинки
-                val requestOptions = RequestOptions()
-                        .placeholder(R.drawable.ic_loading)
-                        .error(R.drawable.ic_no_connect)
+            val USER_AGENT = "Post application v1.0.3"
 
-                // Загрузка картинки
+                if (post.img != null){
+                    val imgUrl = GlideUrl(
+                        post.img, LazyHeaders.Builder()
+                            .addHeader("User-Agent", USER_AGENT)
+                            .build()
+                    )
+
+                val requestOptions = RequestOptions()
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_no_connect)
+
+
                 Glide.with(itemView.context)
-                        .applyDefaultRequestOptions(requestOptions)
-                        .load(post.img)
+                    .applyDefaultRequestOptions(requestOptions)
+
+                    .load(imgUrl)
+                    .timeout(6000)
+                    .listener(object: RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.e(TAG, "=====>>>> Load failed", e)
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+                })
                         .into(image)
             }
 
