@@ -97,8 +97,6 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
                 emit(DownloadResult.Success(Json.decodeFromString(String(data))))
             } catch (e: IOException) {
                 emit(DownloadResult.Error(e))
-            }  catch (e: IOException) {
-                emit(DownloadResult.Error(e))
             } catch (err: RedirectResponseException) {
                 Log.e("->> Error redirect: ", err.response.status.description)
             } catch (err: ClientRequestException) {
