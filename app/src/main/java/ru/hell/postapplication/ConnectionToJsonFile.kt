@@ -15,14 +15,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
-
-
-const val URL0 = "https://raw.githubusercontent.com/Svinsborg/jsonfiles/main/autocreate.json"
-const val URL1 = "https://viktorov.ml/res/doc/AutoCreate.json"
-const val URL2 = "https://95.165.135.238/res/doc/AutoCreate.json"
-const val URL3 = "http://viktorov.ml:8008/post"
-const val URL4 = "http://viktorov.ml:8008/sql"
-const val URL5 = "http://192.168.1.75:8008/post"
+const val URL3 = "http://viktorov.ml:8008/post"   // ===>>> рабочий адресс
+const val URL4 = "http://viktorov.ml:8008/sql"    // ===>>> реализация на MySQL
+const val URL5 = "http://192.168.1.75:8008/post"  // ===>>> для локальной отладки
 
 sealed interface DownloadResult<out T> {
     data class Success<T>(val value: T) : DownloadResult<T>

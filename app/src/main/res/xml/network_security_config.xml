@@ -3,9 +3,12 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">viktorov.ml/</domain>
         <domain includeSubdomains="true">www.viktorov.ml/</domain>
+        <domain includeSubdomains="true">192.168.001.075/</domain>
         <trust-anchors>
             <certificates src="system"/>
+            <certificates src="user"/>
         </trust-anchors>
     </domain-config>
 </network-security-config>
+
 

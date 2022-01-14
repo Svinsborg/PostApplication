@@ -12,76 +12,76 @@ class DateResource {
 
             list.add(
                 Post(
-                        type = PostType.POST,
-                        id = 0,
-                        author = "Andy",
-                        content = "Some very long text for testing application for Android",
-                        created = "1605914700", // 20 November 2020 г., 23:25:00
-                        liked = false,
-                        sharedCount = 13,
-                        commentCount = 2,
-                        likeCount = 5
-                )
-            )
-
-            list.add(
-                    Post(
-                            type = PostType.REPOST,
-                            id = 1,
-                            author = "Filth",
-                            created = "1612299228",
-                            liked =  false,
-                            sharedCount = 13,
-                            commentCount = 2,
-                            likeCount = 5,
-                            source = list[0]
-                    )
-            )
-
-            list.add(
-                Post(
-                        type = PostType.EVENTS,
-                        id = 2,
-                        author = "RIDan",
-                        content = "Сломал все что было, кто ченить будет? \nСмотри геолокацияю ниже",
-                        created = "1606785652",
-                        liked = true,
-                        sharedCount = 22,
-                        commentCount = 0,
-                        likeCount = 14,
-                        address = "Kandor",
-                        location = Pair(61.66611486351941, 7.00560833613891)
+                    type = PostType.POST,
+                    id = 0,
+                    author = "Andy",
+                    content = "Some very long text for testing application for Android",
+                    created = "1605914700", // 20 November 2020 г., 23:25:00
+                    liked = false,
+                    sharedCount = 13,
+                    commentCount = 2,
+                    likeCount = 5
                 )
             )
 
             list.add(
                 Post(
-                        type = PostType.VIDEO,
-                        id = 3,
-                        author = "Svinsborg",
-                        content = "Свинья свиньей!",
-                        created = "1605610533",
-                        liked = false,
-                        idVideoYT = "a4Uzufh4X3A",
-                        sharedCount = 2,
-                        commentCount = 5,
-                        likeCount = 0
+                    type = PostType.REPOST,
+                    id = 1,
+                    author = "Filth",
+                    created = "1612299228",
+                    liked = false,
+                    sharedCount = 13,
+                    commentCount = 2,
+                    likeCount = 5,
+                    source = list[0]
                 )
             )
 
             list.add(
                 Post(
-                        type = PostType.COMMERCIAL,
-                        id = 4,
-                        author = "Satan",
-                        content = "Работай! А то так и будешь пыль с камер протирать!",
-                        created = "1606577272",
-                        liked = false,
-                        sharedCount = 0,
-                        commentCount = 0,
-                        likeCount = 0,
-                        img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
-                        url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
+                    type = PostType.EVENTS,
+                    id = 2,
+                    author = "RIDan",
+                    content = "Сломал все что было, кто ченить будет? \nСмотри геолокацияю ниже",
+                    created = "1606785652",
+                    liked = true,
+                    sharedCount = 22,
+                    commentCount = 0,
+                    likeCount = 14,
+                    address = "Kandor",
+                    location = Pair(61.66611486351941, 7.00560833613891)
+                )
+            )
+
+            list.add(
+                Post(
+                    type = PostType.VIDEO,
+                    id = 3,
+                    author = "Svinsborg",
+                    content = "Свинья свиньей!",
+                    created = "1605610533",
+                    liked = false,
+                    idVideoYT = "a4Uzufh4X3A",
+                    sharedCount = 2,
+                    commentCount = 5,
+                    likeCount = 0
+                )
+            )
+
+            list.add(
+                Post(
+                    type = PostType.COMMERCIAL,
+                    id = 4,
+                    author = "Satan",
+                    content = "Работай! А то так и будешь пыль с камер протирать!",
+                    created = "1606577272",
+                    liked = false,
+                    sharedCount = 0,
+                    commentCount = 0,
+                    likeCount = 0,
+                    img = "https://sun9-7.userapi.com/impf/c624122/v624122341/379a1/Vu0kJyTTupA.jpg?size=807x778&quality=96&sign=51f4494f50f8c67388d408ed7308b545&type=album",
+                    url = "https://www.youtube.com/channel/UCbnY0I0Dt9-SK8I32y1WyjQ"
                 )
             )
 

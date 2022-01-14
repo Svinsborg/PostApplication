@@ -1,7 +1,5 @@
 package ru.hell.postapplication
 
-
-
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +11,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
-
-
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private lateinit var postBlogAdapter : PostRecyclerAdapter
@@ -24,7 +20,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-
         loadData()
     }
 
@@ -46,7 +41,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun loadData() = launch {
         val client = ConnectionToJsonFile(CIO.create())
         client.getPost()
-            // TODO Для демонстрации
             .onEach { delay(100) }
             .onEach {
                 when (val result = it) {

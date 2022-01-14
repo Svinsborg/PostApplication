@@ -28,12 +28,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import kotlinx.android.synthetic.main.post_view.view.*
 
 
-class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Post> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.post_view, parent, false))
+        return PostViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.post_view, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -46,7 +48,7 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 
-    fun submitData(postlist : List<Post>) {
+    fun submitData(postlist: List<Post>) {
         items = postlist
     }
 
@@ -70,7 +72,7 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private lateinit var youTubePlayer: YouTubePlayer
 
-        init{
+        init {
             youTubePlayerView.getPlayerUiController().showFullscreenButton(true)
             youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady(@NonNull youTubePlayer: YouTubePlayer) {
@@ -89,45 +91,43 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             val USER_AGENT = "Post application v1.0.3"
 
-                if (post.img != null){
-                    val imgUrl = GlideUrl(
-                        post.img, LazyHeaders.Builder()
-                            .addHeader("User-Agent", USER_AGENT)
-                            .build()
-                    )
-
+            if (post.img != null) {
+                val imgUrl = GlideUrl(
+                    post.img, LazyHeaders.Builder()
+                        .addHeader("User-Agent", USER_AGENT)
+                        .build()
+                )
                 val requestOptions = RequestOptions()
                     .placeholder(R.drawable.ic_loading)
                     .error(R.drawable.ic_no_connect)
-
 
                 Glide.with(itemView.context)
                     .applyDefaultRequestOptions(requestOptions)
 
                     .load(imgUrl)
                     .timeout(6000)
-                    .listener(object: RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        Log.e(TAG, "=====>>>> Load failed", e)
-                        return false
-                    }
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            Log.e(TAG, "=====>>>> Load failed", e)
+                            return false
+                        }
 
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false
-                    }
-                })
-                        .into(image)
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+                    })
+                    .into(image)
             }
 
             val moscowGMT = 10800L // +3 GMT
@@ -142,7 +142,7 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             likeCount.text = likeMath(post.liked, post.likeCount)
             address.text = post.address
 
-            if (post.source != null){
+            if (post.source != null) {
                 repAuthor.text = post.source.author
                 val startDate: Long = post.source.created.toLong()
                 val timePost = frendlyTime((timestamp - startDate))
@@ -152,7 +152,6 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 repDate.textSize = 10.0F
                 repAuthor.textSize = 15.0F
             }
-
 
             // Проверяем заполнена ли переменная
             if (::youTubePlayer.isInitialized) {
@@ -165,16 +164,15 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             // Наверное, плеер стоит скрыть, если видео нет?
-            youTubePlayerView.isVisible = videoId!= null
-
+            youTubePlayerView.isVisible = videoId != null
 
             liked.setOnClickListener {
                 liked.setImageResource(
-                        if (post.liked) {
-                            R.drawable.favoriteoff
-                        } else {
-                            R.drawable.favoriteon
-                        }
+                    if (post.liked) {
+                        R.drawable.favoriteoff
+                    } else {
+                        R.drawable.favoriteon
+                    }
                 )
                 post.liked = !post.liked
                 likeCount.text = likeMath(post.liked, post.likeCount)
@@ -204,7 +202,7 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             when (post.type) {
- //               PostType.POST -> showHide(imgGeo)
+                //               PostType.POST -> showHide(imgGeo)
                 PostType.EVENTS -> showHide(imgGeo)
                 PostType.REPOST -> showHide(repost)
 //                PostType.REPLY -> showHide(imgGeo)
@@ -213,9 +211,8 @@ class PostRecyclerAdapter :  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         }
 
-        private fun showHide(view:View) {
+        private fun showHide(view: View) {
             view.visibility = View.VISIBLE
         }
-
     }
 }
