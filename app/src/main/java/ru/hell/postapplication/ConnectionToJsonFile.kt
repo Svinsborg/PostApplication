@@ -3,6 +3,7 @@ package ru.hell.postapplication
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
@@ -15,9 +16,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
-const val URL3 = "http://viktorov.ml:8008/post"   // ===>>> рабочий адресс
-const val URL4 = "http://viktorov.ml:8008/sql"    // ===>>> реализация на MySQL
-const val URL5 = "http://192.168.1.75:8008/post"  // ===>>> для локальной отладки
+const val URL4 = "http://viktorov.ml:8008/api/v1/post"    // ===>>> внешняя ссылка
+const val URL5 = "http://192.168.1.75:8008/api/v1/post"  // ===>>> для локальной отладки
 
 sealed interface DownloadResult<out T> {
     data class Success<T>(val value: T) : DownloadResult<T>
@@ -29,13 +29,16 @@ typealias PostsResult = DownloadResult<List<Post>>
 
 class ConnectionToJsonFile (engine: HttpClientEngine) {
 
-    private val client = HttpClient(engine) {
+    private val clientHttp = HttpClient(engine) {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
             acceptContentTypes = listOf(
                 ContentType.Text.Plain,
                 ContentType.Application.Json
             )
+        }
+        install(UserAgent) {
+            agent = "Post App Client"
         }
         install(Logging) {
             Log.d("->> HTTP Client: ", Logger.DEFAULT.toString())
@@ -46,8 +49,8 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
     fun getPost(): Flow<PostsResult> =
         flow {
             try {
-                val response = client.request<HttpResponse> {
-                    url(URL3)
+                val response = clientHttp.request<HttpResponse> {
+                    url(URL5)
                     method = HttpMethod.Get
                 }
                 val data = ByteArray((response.contentLength() ?: 0L).toInt())

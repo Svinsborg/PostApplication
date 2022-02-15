@@ -131,7 +131,7 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             val moscowGMT = 10800L // +3 GMT
-            val startDate: Long = post.created.toLong()
+            val startDate: Long = post.created?.toLong() ?: System.currentTimeMillis()
             val timestamp = System.currentTimeMillis() / 1000 + moscowGMT
             val timePost = frendlyTime((timestamp - startDate))
             val videoId = post.idVideoYT
@@ -144,7 +144,7 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             if (post.source != null) {
                 repAuthor.text = post.source.author
-                val startDate: Long = post.source.created.toLong()
+                val startDate: Long = post.source.created?.toLong() ?: System.currentTimeMillis()
                 val timePost = frendlyTime((timestamp - startDate))
                 repDate.text = timePost
                 repContent.text = post.source.content
@@ -165,6 +165,15 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             // Наверное, плеер стоит скрыть, если видео нет?
             youTubePlayerView.isVisible = videoId != null
+
+            liked.setImageResource(
+                if (post.liked) {
+                    R.drawable.favoriteon
+                } else {
+                    R.drawable.favoriteoff
+                }
+            )
+
 
             liked.setOnClickListener {
                 liked.setImageResource(
@@ -216,3 +225,5 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 }
+
+

@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     is DownloadResult.Success -> {
                         LoadData.isVisible = false
                         postBlogAdapter.submitData(result.value)
-                        postBlogAdapter.notifyItemRangeInserted(0, result.value.size)
+                        postBlogAdapter.notifyItemChanged(0, result.value.size)
                     }
                 }
             }

@@ -5,10 +5,10 @@ import kotlinx.serialization.*
 @Serializable
 data class Post(
         val type: PostType = PostType.POST,
-        val id: Int,
+        val id: Int? = null,
         val author: String,
         val content: String? = null,
-        val created: String,
+        val created: String? = null,
         var liked: Boolean = false,
         var sharedCount: Int,
         var commentCount: Int,
