@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -98,33 +99,17 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(post: Post) {
 
-            loadImg(post.img)
-
-            val moscowGMT = 10800L // +3 GMT
-            val startDate: Long = post.created?.toLong() ?: System.currentTimeMillis()
-            val timestamp = System.currentTimeMillis() / 1000 + moscowGMT
-            val timePost = frendlyTime((timestamp - startDate))
+            val startDate = post.created
             val videoId = post.idVideoYT
 
+            loadImg(post.img)
             author.text = post.author
-            created.text = timePost
+            created.text = startDate?.let { setTime(it) }
             content.text = post.content
             likeCount.text = likeMath(post.liked, post.likeCount)
             address.text = post.address
 
-
-            if (post.source != null) { //else
-                repAuthor.text = post.source.author
-                val startDate: Long = post.source.created?.toLong() ?: System.currentTimeMillis()
-                val timePost = frendlyTime((timestamp - startDate))
-                repDate.text = timePost
-                repContent.text = post.source.content
-                repContent.textSize = 18.0F
-                repDate.textSize = 10.0F
-                repAuthor.textSize = 15.0F
-            }  else {
-      //TODO
-            }
+            post.source?.let { repostView(it) }
 
             // Проверяем заполнена ли переменная
             if (::youTubePlayer.isInitialized) {
@@ -144,7 +129,6 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     R.drawable.favoriteoff
                 }
             )
-
 
             liked.setOnClickListener {
                 liked.setImageResource(
@@ -177,29 +161,69 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (post.commentCount > 0) { //else
                 commentCount.text = post.commentCount.toString()
             }  else {
-                 //TODO
+                commentCount.isInvisible = true //TODO
             }
             if (post.sharedCount > 0) { //else
                 sharedCount.text = post.sharedCount.toString()
             }  else {
-                 //TODO
+                sharedCount.isInvisible = true //TODO
             }
 
             when (post.type) {
-                //               PostType.POST -> showHide(imgGeo)
-                PostType.EVENTS -> imgGeo.isVisible = true
-                PostType.REPOST -> repost.isVisible = true
-//                PostType.REPLY -> showHide(imgGeo)
-//                PostType.VIDEO -> showHide(imgGeo)
-                PostType.COMMERCIAL -> image.isVisible = true
+                PostType.POST -> {
+                    imgGeo.isGone = true
+                    repost.isGone = true
+                    youTubePlayerView.isGone = true
+                    image.isGone = true
+                }
+                PostType.EVENTS -> {
+                    imgGeo.isVisible = true
+                    repost.isGone = true
+                    youTubePlayerView.isGone = true
+                    image.isGone = true
+                }
+                PostType.REPOST -> {
+                    repost.isVisible = true
+                    imgGeo.isGone = true
+                    youTubePlayerView.isGone = true
+                    image.isGone = true
+                }
+                PostType.VIDEO -> {
+                    youTubePlayerView.isVisible = true
+                    imgGeo.isGone = true
+                    repost.isGone = true
+                    image.isGone = true
+                }
+                PostType.COMMERCIAL -> {
+                    image.isVisible = true
+                    imgGeo.isGone = true
+                    repost.isGone = true
+                    youTubePlayerView.isGone = true
+                }
                 else -> {
-                    imgGeo.isInvisible = true
-                    repost.isInvisible = true
-//                PostType.REPLY -> showHide(imgGeo)
-//                PostType.VIDEO -> showHide(imgGeo)
-                    image.isInvisible = true  //TODO
+                    imgGeo.isGone = true
+                    repost.isGone = true
+                    youTubePlayerView.isGone = true
+                    image.isGone = true  //TODO
                 }
             }
+        }
+
+        private fun setTime(created: String): String? {
+            val moscowGMT = 10800L // +3 GMT
+            val startDate: Long = created.toLong()
+            val timestamp = System.currentTimeMillis() / 1000 + moscowGMT
+            return frendlyTime((timestamp - startDate))
+        }
+
+        private fun repostView(post: Post) {
+            repAuthor.text = post.author
+            val startDate = post.created
+            repDate.text = startDate?.let { setTime(it) }
+            repContent.text = post.content
+            repContent.textSize = 18.0F
+            repDate.textSize = 10.0F
+            repAuthor.textSize = 15.0F
         }
 
         private fun loadImg(img: String?) {

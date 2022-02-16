@@ -39,7 +39,7 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
             )
         }
         install(UserAgent) {
-            agent = "GiT Post App Client"
+            agent = "Post App Client"
         }
         install(Logging) {
             Log.d("->> HTTP Client: ", Logger.DEFAULT.toString())
