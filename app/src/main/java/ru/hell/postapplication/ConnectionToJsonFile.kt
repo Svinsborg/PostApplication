@@ -16,7 +16,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
-const val URL4 = "http://viktorov.ml:8008/api/v1/post"    // ===>>> внешняя ссылка
+const val URL3 = "http://viktorov.ml:8008/api/v1/post"    // ===>>> внешняя ссылка
+const val URL4 = "http://192.168.1.78:8008/api/v1/post"  // ===>>> для локальной отладки
 const val URL5 = "http://192.168.1.75:8008/api/v1/post"  // ===>>> для локальной отладки
 
 sealed interface DownloadResult<out T> {
@@ -50,7 +51,7 @@ class ConnectionToJsonFile (engine: HttpClientEngine) {
         flow {
             try {
                 val response = clientHttp.request<HttpResponse> {
-                    url(URL5)
+                    url(URL3)
                     method = HttpMethod.Get
                 }
                 val data = ByteArray((response.contentLength() ?: 0L).toInt())

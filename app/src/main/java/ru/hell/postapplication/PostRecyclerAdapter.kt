@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,9 +29,15 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import kotlinx.android.synthetic.main.post_view.view.*
 
 
+
 class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Post> = ArrayList()
+
+        set(newValue) {
+            field = newValue
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PostViewHolder(
@@ -39,9 +46,11 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         when (holder) {
             is PostViewHolder -> {
-                holder.bind(items[position]) //TUT
+                holder.bind(items[position])
+                //TUT
             }
         }
     }
@@ -89,46 +98,7 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(post: Post) {
 
-            val USER_AGENT = "Post application v1.0.3"
-
-            if (post.img != null) {
-                val imgUrl = GlideUrl(
-                    post.img, LazyHeaders.Builder()
-                        .addHeader("User-Agent", USER_AGENT)
-                        .build()
-                )
-                val requestOptions = RequestOptions()
-                    .placeholder(R.drawable.ic_loading)
-                    .error(R.drawable.ic_no_connect)
-
-                Glide.with(itemView.context)
-                    .applyDefaultRequestOptions(requestOptions)
-
-                    .load(imgUrl)
-                    .timeout(6000)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            Log.e(TAG, "=====>>>> Load failed", e)
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-                    })
-                    .into(image)
-            }
+            loadImg(post.img)
 
             val moscowGMT = 10800L // +3 GMT
             val startDate: Long = post.created?.toLong() ?: System.currentTimeMillis()
@@ -142,7 +112,8 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             likeCount.text = likeMath(post.liked, post.likeCount)
             address.text = post.address
 
-            if (post.source != null) {
+
+            if (post.source != null) { //else
                 repAuthor.text = post.source.author
                 val startDate: Long = post.source.created?.toLong() ?: System.currentTimeMillis()
                 val timePost = frendlyTime((timestamp - startDate))
@@ -151,6 +122,8 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 repContent.textSize = 18.0F
                 repDate.textSize = 10.0F
                 repAuthor.textSize = 15.0F
+            }  else {
+      //TODO
             }
 
             // Проверяем заполнена ли переменная
@@ -158,11 +131,9 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 videoId?.let { youTubePlayer.cueVideo(it, 0f) }
                 youTubePlayerView.tag = null
             } else {
-
                 // Если нет, пишем во вьюшку на будущее
                 youTubePlayerView.tag = post.idVideoYT
             }
-
             // Наверное, плеер стоит скрыть, если видео нет?
             youTubePlayerView.isVisible = videoId != null
 
@@ -203,27 +174,89 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 it.context.startActivity(intent)
             }
 
-            if (post.commentCount > 0) {
+            if (post.commentCount > 0) { //else
                 commentCount.text = post.commentCount.toString()
+            }  else {
+                 //TODO
             }
-            if (post.sharedCount > 0) {
+            if (post.sharedCount > 0) { //else
                 sharedCount.text = post.sharedCount.toString()
+            }  else {
+                 //TODO
             }
 
             when (post.type) {
                 //               PostType.POST -> showHide(imgGeo)
-                PostType.EVENTS -> showHide(imgGeo)
-                PostType.REPOST -> showHide(repost)
+                PostType.EVENTS -> imgGeo.isVisible = true
+                PostType.REPOST -> repost.isVisible = true
 //                PostType.REPLY -> showHide(imgGeo)
 //                PostType.VIDEO -> showHide(imgGeo)
-                PostType.COMMERCIAL -> showHide(image)
+                PostType.COMMERCIAL -> image.isVisible = true
+                else -> {
+                    imgGeo.isInvisible = true
+                    repost.isInvisible = true
+//                PostType.REPLY -> showHide(imgGeo)
+//                PostType.VIDEO -> showHide(imgGeo)
+                    image.isInvisible = true  //TODO
+                }
             }
         }
+
+        private fun loadImg(img: String?) {
+            if (img != null) {
+                imgBind(img)
+            } else {
+                image.isInvisible = true
+            }
+        }
+
+        private fun imgBind(img: String?) {
+            val USER_AGENT = "Post application v1.0.3"
+            try {
+                val imgUrl = GlideUrl(
+                    img, LazyHeaders.Builder()
+                        .addHeader("User-Agent", USER_AGENT)
+                        .build()
+                )
+                val requestOptions = RequestOptions()
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_no_connect)
+                Glide.with(itemView.context)
+                    .applyDefaultRequestOptions(requestOptions)
+                    .load(imgUrl)
+                    .timeout(6000)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            Log.e(TAG, "=====>>>> Load failed", e)
+                            return false
+                        }
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+                    }).into(image)
+            } catch (e: Exception) {
+                print("===>>>> Exception: ${e.message}")
+            }
+        }
+
 
         private fun showHide(view: View) {
             view.visibility = View.VISIBLE
         }
     }
 }
+
+
 
 
