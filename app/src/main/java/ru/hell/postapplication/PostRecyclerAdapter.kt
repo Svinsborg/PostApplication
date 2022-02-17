@@ -30,11 +30,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import kotlinx.android.synthetic.main.post_view.view.*
 
 
-
 class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Post> = ArrayList()
-
         set(newValue) {
             field = newValue
             notifyDataSetChanged()
@@ -42,7 +40,7 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PostViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.post_view, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.post_view, parent, false)
         )
     }
 
@@ -123,20 +121,20 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             youTubePlayerView.isVisible = videoId != null
 
             liked.setImageResource(
-                if (post.liked) {
-                    R.drawable.favoriteon
-                } else {
-                    R.drawable.favoriteoff
-                }
+                    if (post.liked) {
+                        R.drawable.favoriteon
+                    } else {
+                        R.drawable.favoriteoff
+                    }
             )
 
             liked.setOnClickListener {
                 liked.setImageResource(
-                    if (post.liked) {
-                        R.drawable.favoriteoff
-                    } else {
-                        R.drawable.favoriteon
-                    }
+                        if (post.liked) {
+                            R.drawable.favoriteoff
+                        } else {
+                            R.drawable.favoriteon
+                        }
                 )
                 post.liked = !post.liked
                 likeCount.text = likeMath(post.liked, post.likeCount)
@@ -160,12 +158,12 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             if (post.commentCount > 0) { //else
                 commentCount.text = post.commentCount.toString()
-            }  else {
+            } else {
                 commentCount.isInvisible = true //TODO
             }
             if (post.sharedCount > 0) { //else
                 sharedCount.text = post.sharedCount.toString()
-            }  else {
+            } else {
                 sharedCount.isInvisible = true //TODO
             }
 
@@ -238,37 +236,38 @@ class PostRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val USER_AGENT = "Post application v1.0.3"
             try {
                 val imgUrl = GlideUrl(
-                    img, LazyHeaders.Builder()
+                        img, LazyHeaders.Builder()
                         .addHeader("User-Agent", USER_AGENT)
                         .build()
                 )
                 val requestOptions = RequestOptions()
-                    .placeholder(R.drawable.ic_loading)
-                    .error(R.drawable.ic_no_connect)
+                        .placeholder(R.drawable.ic_loading)
+                        .error(R.drawable.ic_no_connect)
                 Glide.with(itemView.context)
-                    .applyDefaultRequestOptions(requestOptions)
-                    .load(imgUrl)
-                    .timeout(6000)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            Log.e(TAG, "=====>>>> Load failed", e)
-                            return false
-                        }
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-                    }).into(image)
+                        .applyDefaultRequestOptions(requestOptions)
+                        .load(imgUrl)
+                        .timeout(6000)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean
+                            ): Boolean {
+                                Log.e(TAG, "=====>>>> Load failed", e)
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
+                        }).into(image)
             } catch (e: Exception) {
                 print("===>>>> Exception: ${e.message}")
             }
